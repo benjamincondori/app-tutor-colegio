@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../controllers/home/home_controller.dart';
+import '../../services/bloc/notifications_bloc.dart';
 import '../../utils/my_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -55,20 +56,19 @@ class _HomeScreenState extends State<HomeScreen> {
               style: const TextStyle(fontSize: 18),
             ),
             accountEmail: Text(_con.user?.userEmail ?? 'correo@example.com'),
-            currentAccountPicture: 
-            // _con.customer?.photo != null
-            //     ? ClipOval(
-            //       child: FadeInImage(
-            //           placeholder: const AssetImage('assets/img/user_profile.png'),
-            //           image: NetworkImage('$_url${_con.customer!.photo!}'),
-            //           fadeInDuration: const Duration(milliseconds: 200),
-            //           fit: BoxFit.cover,
-            //         ),
-            //     )
+            currentAccountPicture:
+                // _con.customer?.photo != null
+                //     ? ClipOval(
+                //       child: FadeInImage(
+                //           placeholder: const AssetImage('assets/img/user_profile.png'),
+                //           image: NetworkImage('$_url${_con.customer!.photo!}'),
+                //           fadeInDuration: const Duration(milliseconds: 200),
+                //           fit: BoxFit.cover,
+                //         ),
+                //     )
                 const CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/img/user_profile.png'),
-                  ),
+              backgroundImage: AssetImage('assets/img/user_profile.png'),
+            ),
           ),
           Expanded(
             child: ListView(
@@ -106,14 +106,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 ListTile(
-                  leading:
-                      Icon(Icons.message, color: MyColors.primaryColor),
+                  leading: Icon(Icons.message, color: MyColors.primaryColor),
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
                     color: MyColors.primaryColor,
                   ),
                   title: const Text('Ver comunicados'),
-                  onTap: () => {},
+                  onTap: () {
+                    Navigator.pushNamed(context, 'home/notifications');
+                  },
                 ),
                 ListTile(
                   leading: Icon(Icons.edit, color: MyColors.primaryColor),
@@ -130,9 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.keyboard_arrow_right,
                     color: MyColors.primaryColor,
                   ),
-                  title: const Text('Cambiar contraseña'),
+                  title: context.select(
+                      (NotificationsBloc bloc) => Text('${bloc.state.status}')),
                   onTap: () {
                     Navigator.pop(context);
+                    context.read<NotificationsBloc>().requestPermission();
                   },
                 ),
                 Container(

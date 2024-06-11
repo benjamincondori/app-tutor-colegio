@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "546260876977",
+    "project_id": "app-tutor-colegio",
+    "storage_bucket": "app-tutor-colegio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546260876977:android:c86a6579a9fc58ffe72c90",
+        "android_client_info": {
+          "package_name": "com.benjamincv.school_student_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7a4DrklcrxODKaT9q2bvmCcRHyr4qjZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
