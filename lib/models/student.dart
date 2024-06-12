@@ -41,8 +41,8 @@ class Student {
   Student.fromJsonList(List<dynamic>? jsonList) {
     if (jsonList == null) return;
     for (var item in jsonList) {
-      Student estudiantesRequest = Student.fromJson(item);
-      toList.add(estudiantesRequest);
+      Student studentsRequest = Student.fromJson(item);
+      toList.add(studentsRequest);
     }
   }
 

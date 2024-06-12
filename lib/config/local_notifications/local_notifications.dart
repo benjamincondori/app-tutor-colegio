@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../screens/notifications/details_notification_screen.dart';
+
 class LocalNotifications {
   static GlobalKey<NavigatorState>? navigatorKey;
 
@@ -68,7 +70,7 @@ class LocalNotifications {
 
     if (payload != null && navigatorKey != null) {
       navigatorKey!.currentState?.pushNamed(
-        'home/details',
+        'home/notification/details',
         arguments: {
           'pushMessageId': payload,
         },

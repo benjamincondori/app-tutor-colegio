@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:school_student_app/screens/home/home_screen.dart';
 import 'package:school_student_app/screens/login/login_screen.dart';
-import 'package:school_student_app/screens/notifications_screen.dart';
+import 'package:school_student_app/screens/notifications/notifications_screen.dart';
 import 'package:school_student_app/screens/students/students_screen.dart';
 import 'package:school_student_app/services/bloc/notifications_bloc.dart';
 import 'package:school_student_app/utils/my_colors.dart';
 import 'package:school_student_app/utils/shared_pref.dart';
 
 import 'config/local_notifications/local_notifications.dart';
-import 'screens/details_screen.dart';
+import 'screens/notifications/details_notification_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -26,9 +26,9 @@ void main() async {
     providers: [
       BlocProvider(
         create: (_) => NotificationsBloc(
-          requestLocalNotificationPermissions: LocalNotifications.requestPermissionLocalNotifications,
-          showLocalNotification: LocalNotifications.showLocalNotification
-        ),
+            requestLocalNotificationPermissions:
+                LocalNotifications.requestPermissionLocalNotifications,
+            showLocalNotification: LocalNotifications.showLocalNotification),
       ),
     ],
     child: MyApp(isLoggedIn: isLoggedIn),
@@ -58,13 +58,13 @@ class MyApp extends StatelessWidget {
             const NotificationsScreen(),
       },
       onGenerateRoute: (settings) {
-        if (settings.name == 'home/details') {
+        if (settings.name == 'home/notification/details') {
           final args = settings.arguments as Map<String, dynamic>;
           final pushMessageId = args['pushMessageId'];
 
           return MaterialPageRoute(
             builder: (context) {
-              return DetailsScreen(pushMessageId: pushMessageId);
+              return DetailsNotificationScreen(pushMessageId: pushMessageId);
             },
           );
         }
@@ -111,12 +111,31 @@ class _HandleNotificationInteractionsState
     final messageId =
         message.messageId?.replaceAll(':', '').replaceAll('%', '');
 
-    print('Message ID: $messageId');
-    
     if (messageId != null) {
-      navigatorKey.currentState?.pushNamed('home/details', arguments: {
-        'pushMessageId': messageId,
-      });
+      // navigatorKey.currentState?.pushNamed(
+      //   'home/notification/details',
+      //   arguments: {
+      //     'pushMessageId': messageId,
+      //   },
+      // );
+
+      print('Message data: ${message.data}');
+
+      final fecha = message.data['fecha'];
+      final titulo = message.data['titulo'];
+      final mensaje = message.data['mensaje'];
+      final tipo = message.data['tipo'];
+
+      navigatorKey.currentState?.push(
+          MaterialPageRoute(
+            builder: (context) => DetailsNotificationScreen(
+              titulo:  titulo ?? '',
+              mensaje: mensaje ?? '',
+              fecha: fecha ?? '',
+              tipo: tipo ?? '',
+            ),
+          ),
+        );
     }
 
     // Navigate to the chat screen

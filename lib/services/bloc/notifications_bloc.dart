@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:school_student_app/config/local_notifications/local_notifications.dart';
+import 'package:school_student_app/utils/shared_pref.dart';
 
 import '../../firebase_options.dart';
 import '../../models/push_message.dart';
@@ -17,8 +17,10 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 
+  // ignore: avoid_print
   print("Handling a background message: ${message.messageId}");
 }
+SharedPref _sharedPref = SharedPref();
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -50,6 +52,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    // ignore: avoid_print
     print('Firebase initialized');
   }
 
@@ -75,6 +78,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     if (state.status != AuthorizationStatus.authorized) return;
 
     final token = await messaging.getToken();
+    _sharedPref.save('deviceToken', token);
+    // ignore: avoid_print
     print(token);
   }
 
@@ -93,9 +98,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
           : message.notification!.apple?.imageUrl,
     );
 
+    // ignore: avoid_print
     print(notification);
 
     if (showLocalNotification != null) {
+      // ignore: avoid_print
       print('Showing local notification');
       showLocalNotification!(
         id: ++pushNumberId,
