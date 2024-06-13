@@ -101,7 +101,13 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
   Widget _cardStudentRequest(Student? request, index) {
     return GestureDetector(
       onTap: () {
-        // _con.openBottomSheet(order);
+        Navigator.pushNamed(
+          context,
+          'home/students/qualifications',
+          arguments: {
+            'student': request,
+          },
+        );
       },
       child: Container(
         height: 140,

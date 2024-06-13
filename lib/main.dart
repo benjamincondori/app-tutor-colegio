@@ -11,6 +11,7 @@ import 'package:school_student_app/utils/shared_pref.dart';
 
 import 'config/local_notifications/local_notifications.dart';
 import 'screens/notifications/details_notification_screen.dart';
+import 'screens/qualifications/qualifications_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -65,6 +66,16 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) {
               return DetailsNotificationScreen(pushMessageId: pushMessageId);
+            },
+          );
+        }
+        if (settings.name == 'home/students/qualifications') {
+          final args = settings.arguments as Map<String, dynamic>;
+          final student = args['student'];
+
+          return MaterialPageRoute(
+            builder: (context) {
+              return QualificationScreen(student: student);
             },
           );
         }

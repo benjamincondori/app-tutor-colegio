@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../controllers/home/home_controller.dart';
-import '../../services/bloc/notifications_bloc.dart';
 import '../../utils/my_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -95,17 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: _con.goToStudentsScreen,
                 ),
                 ListTile(
-                  leading: Icon(Icons.file_copy, color: MyColors.primaryColor),
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right,
-                    color: MyColors.primaryColor,
-                  ),
-                  title: const Text('Ver boletines'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
                   leading: Icon(Icons.message, color: MyColors.primaryColor),
                   trailing: Icon(
                     Icons.keyboard_arrow_right,
@@ -116,28 +103,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.pushNamed(context, 'home/notifications');
                   },
                 ),
-                ListTile(
-                  leading: Icon(Icons.edit, color: MyColors.primaryColor),
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right,
-                    color: MyColors.primaryColor,
-                  ),
-                  title: const Text('Editar perfil'),
-                  onTap: () => {},
-                ),
-                ListTile(
-                  leading: Icon(Icons.lock, color: MyColors.primaryColor),
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right,
-                    color: MyColors.primaryColor,
-                  ),
-                  title: context.select(
-                      (NotificationsBloc bloc) => Text('${bloc.state.status}')),
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.read<NotificationsBloc>().requestPermission();
-                  },
-                ),
+                // ListTile(
+                //   leading: Icon(Icons.edit, color: MyColors.primaryColor),
+                //   trailing: Icon(
+                //     Icons.keyboard_arrow_right,
+                //     color: MyColors.primaryColor,
+                //   ),
+                //   title: const Text('Editar perfil'),
+                //   onTap: () => {},
+                // ),
+                // ListTile(
+                //   leading: Icon(Icons.lock, color: MyColors.primaryColor),
+                //   trailing: Icon(
+                //     Icons.keyboard_arrow_right,
+                //     color: MyColors.primaryColor,
+                //   ),
+                //   title: context.select(
+                //       (NotificationsBloc bloc) => Text('${bloc.state.status}')),
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     context.read<NotificationsBloc>().requestPermission();
+                //   },
+                // ),
                 Container(
                   width: double.infinity,
                   margin: const EdgeInsets.symmetric(
