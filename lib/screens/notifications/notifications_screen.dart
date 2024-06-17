@@ -102,6 +102,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               mensaje: request?.mensaje ?? '',
               fecha: request?.fecha ?? '',
               tipo: request?.tipo ?? '',
+              remitente: request?.remitente ?? '',
             ),
           ),
         );

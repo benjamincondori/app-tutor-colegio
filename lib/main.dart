@@ -10,6 +10,7 @@ import 'package:school_student_app/utils/my_colors.dart';
 import 'package:school_student_app/utils/shared_pref.dart';
 
 import 'config/local_notifications/local_notifications.dart';
+import 'screens/newsletter/newsletter_screen.dart';
 import 'screens/notifications/details_notification_screen.dart';
 import 'screens/qualifications/qualifications_screen.dart';
 
@@ -27,9 +28,10 @@ void main() async {
     providers: [
       BlocProvider(
         create: (_) => NotificationsBloc(
-            requestLocalNotificationPermissions:
-                LocalNotifications.requestPermissionLocalNotifications,
-            showLocalNotification: LocalNotifications.showLocalNotification),
+          requestLocalNotificationPermissions:
+              LocalNotifications.requestPermissionLocalNotifications,
+          showLocalNotification: LocalNotifications.showLocalNotification,
+        ),
       ),
     ],
     child: MyApp(isLoggedIn: isLoggedIn),
@@ -54,11 +56,21 @@ class MyApp extends StatelessWidget {
       routes: {
         'login': (BuildContext context) => const LoginScreen(),
         'home': (BuildContext context) => const HomeScreen(),
-        'home/students': (BuildContext context) => const StudentsListScreen(),
+        // 'home/students': (BuildContext context) => const StudentsListScreen(),
         'home/notifications': (BuildContext context) =>
             const NotificationsScreen(),
       },
       onGenerateRoute: (settings) {
+        if (settings.name == 'home/students') {
+          final args = settings.arguments as Map<String, dynamic>;
+          final isNewsletter = args['isNewsletter'];
+
+          return MaterialPageRoute(
+            builder: (context) {
+              return StudentsListScreen(isNewsletter: isNewsletter);
+            },
+          );
+        }
         if (settings.name == 'home/notification/details') {
           final args = settings.arguments as Map<String, dynamic>;
           final pushMessageId = args['pushMessageId'];
@@ -76,6 +88,16 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) {
               return QualificationScreen(student: student);
+            },
+          );
+        }
+        if (settings.name == 'home/students/newsletters') {
+          final args = settings.arguments as Map<String, dynamic>;
+          final student = args['student'];
+
+          return MaterialPageRoute(
+            builder: (context) {
+              return NewsletterScreen(student: student);
             },
           );
         }
@@ -136,17 +158,19 @@ class _HandleNotificationInteractionsState
       final titulo = message.data['titulo'];
       final mensaje = message.data['mensaje'];
       final tipo = message.data['tipo'];
+      final remitente = message.data['remitente'];
 
       navigatorKey.currentState?.push(
-          MaterialPageRoute(
-            builder: (context) => DetailsNotificationScreen(
-              titulo:  titulo ?? '',
-              mensaje: mensaje ?? '',
-              fecha: fecha ?? '',
-              tipo: tipo ?? '',
-            ),
+        MaterialPageRoute(
+          builder: (context) => DetailsNotificationScreen(
+            titulo: titulo ?? '',
+            mensaje: mensaje ?? '',
+            fecha: fecha ?? '',
+            tipo: tipo ?? '',
+            remitente: remitente ?? '',
           ),
-        );
+        ),
+      );
     }
 
     // Navigate to the chat screen

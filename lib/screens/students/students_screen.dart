@@ -6,7 +6,9 @@ import '../../models/student.dart';
 import '../../utils/my_colors.dart';
 
 class StudentsListScreen extends StatefulWidget {
-  const StudentsListScreen({super.key});
+  final bool isNewsletter;
+
+  const StudentsListScreen({super.key, required this.isNewsletter});
 
   @override
   State<StudentsListScreen> createState() => _StudentsListScreenState();
@@ -14,10 +16,12 @@ class StudentsListScreen extends StatefulWidget {
 
 class _StudentsListScreenState extends State<StudentsListScreen> {
   final StudentsController _con = StudentsController();
+  late bool isNewsletter;
 
   @override
   void initState() {
     super.initState();
+    isNewsletter = widget.isNewsletter;
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _con.init(context, refresh);
     });
@@ -41,7 +45,7 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
           onPressed: () => {Navigator.pop(context)},
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: const Text('Calificaciones'),
+        title: Text(isNewsletter ? 'Boletines' : 'Calificaciones'),
       ),
       body: RefreshIndicator(
         color: Colors.white,
@@ -101,13 +105,25 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
   Widget _cardStudentRequest(Student? request, index) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          'home/students/qualifications',
-          arguments: {
-            'student': request,
-          },
-        );
+        
+        if (isNewsletter) {
+          Navigator.pushNamed(
+            context,
+            'home/students/newsletters',
+            arguments: {
+              'student': request,
+            },
+          );
+        } else {
+          Navigator.pushNamed(
+            context,
+            'home/students/qualifications',
+            arguments: {
+              'student': request,
+            },
+          );
+        }
+        
       },
       child: Container(
         height: 140,

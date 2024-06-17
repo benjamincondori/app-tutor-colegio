@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:school_student_app/utils/my_colors.dart';
 
 import '../../models/push_message.dart';
 import '../../services/bloc/notifications_bloc.dart';
@@ -10,14 +11,17 @@ class DetailsNotificationScreen extends StatelessWidget {
   final String? mensaje;
   final String? fecha;
   final String? tipo;
+  final String? remitente;
 
-  const DetailsNotificationScreen(
-      {super.key,
-      this.titulo,
-      this.mensaje,
-      this.fecha,
-      this.pushMessageId,
-      this.tipo});
+  const DetailsNotificationScreen({
+    super.key,
+    this.titulo,
+    this.mensaje,
+    this.fecha,
+    this.pushMessageId,
+    this.tipo,
+    this.remitente,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +58,40 @@ class DetailsNotificationScreen extends StatelessWidget {
               (message != null) ? message.title : titulo ?? '',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 5),
+            Row(
+              children: [
+                Text(
+                  'Remitente: ',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: MyColors.primaryColor,
+                  ),
+                ),
+                Text(
+                  (message != null)
+                      ? message.data!['remitente']
+                      : remitente ?? '',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            const SizedBox(height: 5),
+            const Divider(thickness: 1.3),
+            const SizedBox(height: 10),
             Text(
               (message != null) ? message.body : mensaje ?? '',
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 15),
-            Text(
-              (message != null) ? message.data!['fecha'] : fecha ?? '',
-              style: const TextStyle(fontSize: 14),
-              textAlign: TextAlign.end,
+            SizedBox(
+              width: double.infinity,
+              child: Text(
+                (message != null) ? message.data!['fecha'] : fecha ?? '',
+                style: const TextStyle(fontSize: 14),
+                textAlign: TextAlign.end,
+              ),
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../../controllers/home/home_controller.dart';
+import '../../models/count_notifications_students.dart';
 import '../../utils/my_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController _con = HomeController();
+  CountNotificationsStudents? item;
   // final String _url = 'http://${Environment.API_URL}';
 
   @override
@@ -25,17 +27,108 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    item = _con.countNotificationsStudentsRequest;
+
+    // final Future<CountNotificationsStudents?> requests =
+    //     Future<CountNotificationsStudents?>.delayed(
+    //   const Duration(seconds: 1),
+    //   () {
+    //     item = _con.countNotificationsStudentsRequest;
+    //     return item;
+    //   },
+    // );
+
     return Scaffold(
       appBar: AppBar(title: const Text('Home')),
       drawer: _myDrawer(),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center, // Alinea al centro
+          children: [
+            // const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: Column(
+                children: [
+                  Text(
+                    'Bienvenido/a',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: MyColors.primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    _con.user?.userName ?? 'Nombre del usuario',
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: MyColors.primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            _card('Estudiantes', item?.hijos ?? 0, Icons.people),
+            const SizedBox(height: 10),
+            _card('Comunicados', item?.comunicados ?? 0, Icons.message),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _card(String label, int? value, IconData icon) {
+    return GestureDetector(
+      onTap: () {
+        if (label == 'Estudiantes') {
+          _con.goToStudentsScreen();
+        } else {
+          _con.goToNotificationsScreen();
+        }
+        item = _con.countNotificationsStudentsRequest;
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        width: double.infinity,
+        height: 150,
+        decoration: BoxDecoration(
+          color: MyColors.primaryColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Home Student'),
-            ElevatedButton(
-              onPressed: _con.logout,
-              child: const Text('Cerrar sesión'),
+            Icon(
+              icon,
+              size: 80,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 30),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  value.toString(),
+                  style: const TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -80,7 +173,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   title: const Text('Inicio'),
                   onTap: () {
-                    Navigator.pop(context); // Cierra el Drawer
+                    _con.goToHomeScreen();
+                    item = _con.countNotificationsStudentsRequest;
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.assignment_turned_in_rounded, color: MyColors.primaryColor),
+                  trailing: Icon(
+                    Icons.keyboard_arrow_right,
+                    color: MyColors.primaryColor,
+                  ),
+                  title: const Text('Ver Calificaciones'),
+                  onTap: () {
+                    _con.goToStudentsScreen();
+                    item = _con.countNotificationsStudentsRequest;
                   },
                 ),
                 ListTile(
@@ -89,8 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.keyboard_arrow_right,
                     color: MyColors.primaryColor,
                   ),
-                  title: const Text('Ver calificaciones'),
-                  onTap: _con.goToStudentsScreen,
+                  title: const Text('Ver Boletines'),
+                  onTap: () {
+                    _con.goToNewsletterScreen();
+                    item = _con.countNotificationsStudentsRequest;
+                  },
                 ),
                 ListTile(
                   leading: Icon(Icons.message, color: MyColors.primaryColor),
@@ -98,9 +207,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.keyboard_arrow_right,
                     color: MyColors.primaryColor,
                   ),
-                  title: const Text('Ver comunicados'),
+                  title: const Text('Ver Comunicados'),
                   onTap: () {
-                    Navigator.pushNamed(context, 'home/notifications');
+                    _con.goToNotificationsScreen();
+                    item = _con.countNotificationsStudentsRequest;
                   },
                 ),
                 // ListTile(

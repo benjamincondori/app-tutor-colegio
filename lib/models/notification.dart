@@ -10,6 +10,7 @@ class NotificationModel {
     late String mensaje;
     late String fecha;
     late String tipo;
+    late String? remitente;
     late List<NotificationModel> toList = [];
 
     NotificationModel({
@@ -18,6 +19,7 @@ class NotificationModel {
         required this.mensaje,
         required this.fecha,
         required this.tipo,
+        required this.remitente,
     });
 
     factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
@@ -26,6 +28,7 @@ class NotificationModel {
         mensaje: json["mensaje"],
         fecha: json["fecha"],
         tipo: json["tipo"],
+        remitente: json["remitente"] == "False False" ?  "Administración Académica" : json["remitente"],
     );
     
     NotificationModel.fromJsonList(List<dynamic>? jsonList) {
@@ -42,5 +45,6 @@ class NotificationModel {
         "mensaje": mensaje,
         "fecha": fecha,
         "tipo": tipo,
+        "remitente": remitente,
     };
 }

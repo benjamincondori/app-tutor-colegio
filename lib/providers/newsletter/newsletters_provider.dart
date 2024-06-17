@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../api/environment.dart';
-import '../../models/qualifications/qualifications.dart';
+import '../../models/newsletter/newsletters.dart';
 import '../../utils/shared_pref.dart';
 
-class QualificationsProvider {
+class NewslettersProvider {
   final String _url = Environment.API_URL;
-  final String _api = '/api/calificaciones_materia';
+  final String _api = '/api/promedio_materias';
 
   BuildContext? context;
 
@@ -17,7 +17,7 @@ class QualificationsProvider {
     this.context = context;
   }
 
-  Future<Qualifications?> getQualificationsSubject(
+  Future<Newsletter?> getNewsletters(
       int alumnoId, int gestionId, int periodoId) async {
     try {
       final user = SharedPref().read('user');
@@ -34,15 +34,15 @@ class QualificationsProvider {
       final data = json.decode(res.body)['data'];
 
       // ignore: avoid_print
-      print('DATA Provider Qualifications: $data');
+      print('DATA Provider Newsletters: $data');
 
-      Qualifications results = Qualifications.fromJson(data);
+      Newsletter results = Newsletter.fromJson(data);
       // ignore: avoid_print
-      print('RESULTS Provider Qualifications: ${results.toJson()}');
+      print('RESULTS Provider Newsletters: ${results.toJson()}');
       return results;
     } catch (e) {
       // ignore: avoid_print
-      print('Error Provider Qualifications: $e');
+      print('Error Provider Newsletters: $e');
       return null;
     }
   }

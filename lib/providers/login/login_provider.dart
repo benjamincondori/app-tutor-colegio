@@ -36,7 +36,7 @@ class LoginProvider {
     } catch (error) {
       // ignore: avoid_print
       print("Error: $error");
-      return ResponseApi(message: 'Error de conexión');
+      return ResponseApi(error: 'Error de conexión');
     }
   }
 }

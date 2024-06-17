@@ -38,7 +38,7 @@ class LoginController {
     // ignore: avoid_print
     print('REPUESTA: ${responseApi?.toJson()}');
 
-    if (responseApi!.success!) {
+    if (responseApi!.success != null && responseApi.success!) {
       User user = User.fromJson(responseApi.data);
       _sharedPref.save('user', user.toJson());
       await _registerToken(user.userId);

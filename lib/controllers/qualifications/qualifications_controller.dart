@@ -4,6 +4,7 @@ import 'package:school_student_app/models/student.dart';
 import '../../models/management.dart';
 import '../../models/period.dart';
 import '../../models/qualification.dart';
+import '../../models/qualifications/qualifications.dart';
 import '../../providers/qualifications/qualifications_provider.dart';
 import '../../utils/my_snackbar.dart';
 
@@ -14,35 +15,37 @@ class QualificationsController {
   Management? selectedManagement;
   Period? selectedPeriod;
   Student? selectedStudent;
+  bool isLoading = false;
 
-  final QualificationsProvider _studentsProvider = QualificationsProvider();
+  final QualificationsProvider _qualificationsProvider = QualificationsProvider();
 
   // User? user;
   // final SharedPref _sharedPref = SharedPref();
   List<Qualification>? qualificationsRequest = [];
+  Qualifications? qualificationsSubjectRequest;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
 
-    _studentsProvider.init(context);
+    _qualificationsProvider.init(context);
     // user = User.fromJson(await _sharedPref.read('user'));
     // qualificationsRequest = await getQualifications();
+    // refresh();
+  }
+
+  Future<void> updateQualificationsSubject(
+      int alumnoId, int gestionId, int periodoId) async {
+    // await Future.delayed(const Duration(seconds: 1));
+    qualificationsSubjectRequest =
+        await getQualificationsSubject(alumnoId, gestionId, periodoId);
     refresh();
   }
 
-  Future<void> updateQualifications(
+  Future<Qualifications?> getQualificationsSubject(
       int alumnoId, int gestionId, int periodoId) async {
-    await Future.delayed(const Duration(seconds: 1));
-    qualificationsRequest =
-        await getQualifications(alumnoId, gestionId, periodoId);
-    refresh();
-  }
-
-  Future<List<Qualification>?> getQualifications(
-      int alumnoId, int gestionId, int periodoId) async {
-    final List<Qualification>? results = await _studentsProvider
-        .getQualifications(alumnoId, gestionId, periodoId);
+    final Qualifications? results = await _qualificationsProvider
+        .getQualificationsSubject(alumnoId, gestionId, periodoId);
     refresh();
     return results;
   }
@@ -59,8 +62,15 @@ class QualificationsController {
       MySnackbar.show(context, 'Debe seleccionar un periodo');
       return;
     }
-
-    updateQualifications(
-        selectedStudent!.id, selectedManagement!.id, selectedPeriod!.id);
+    
+    updateLoading(true);
+    
+    updateQualificationsSubject(
+        selectedStudent!.id, selectedManagement!.id, selectedPeriod!.id).whenComplete(() => updateLoading(false));
+  }
+  
+  void updateLoading(bool value) {
+    isLoading = value;
+    refresh();
   }
 }

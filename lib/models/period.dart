@@ -8,26 +8,17 @@ String periodToMap(List<Period> data) =>
 
 class Period {
   late int id;
-  late DateTime fechaInicio;
-  late DateTime fechaFinal;
-  late String tipoPeriodo;
-  late String gestion;
+  late String descripcion;
   late List<Period> toList = [];
 
   Period({
     required this.id,
-    required this.fechaInicio,
-    required this.fechaFinal,
-    required this.tipoPeriodo,
-    required this.gestion,
+    required this.descripcion,
   });
 
   factory Period.fromJson(Map<String, dynamic> json) => Period(
         id: json["id"],
-        fechaInicio: DateTime.parse(json["fecha_inicio"]),
-        fechaFinal: DateTime.parse(json["fecha_final"]),
-        tipoPeriodo: json["tipo_periodo"],
-        gestion: json["gestion"],
+        descripcion: json["descripcion"],
       );
       
   Period.fromJsonList(List<dynamic>? jsonList) {
@@ -40,11 +31,6 @@ class Period {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "fecha_inicio":
-            "${fechaInicio.year.toString().padLeft(4, '0')}-${fechaInicio.month.toString().padLeft(2, '0')}-${fechaInicio.day.toString().padLeft(2, '0')}",
-        "fecha_final":
-            "${fechaFinal.year.toString().padLeft(4, '0')}-${fechaFinal.month.toString().padLeft(2, '0')}-${fechaFinal.day.toString().padLeft(2, '0')}",
-        "tipo_periodo": tipoPeriodo,
-        "gestion": gestion,
+        "descripcion": descripcion,
       };
 }
